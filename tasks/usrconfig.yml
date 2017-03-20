@@ -1,0 +1,14 @@
+---
+
+- name: Setting the Numix GTK theme
+  command: /usr/bin/gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
+  changed_when: False
+
+- name: Setting the Numix icon theme
+  command: /usr/bin/gsettings set org.gnome.desktop.interface icon-theme "Numix-Circle-Light"
+  changed_when: False
+
+- name: Remind about VirtualBox Extension Pack
+  debug:
+    msg: "Remember to download the VirtualBox Extension Pack from https://www.virtualbox.org/wiki/Downloads"
+  changed_when: False

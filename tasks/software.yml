@@ -1,0 +1,113 @@
+---
+- name: Install software from official repos
+  dnf:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { name: brasero, state: present }
+    - { name: chromium, state: present }
+    - { name: cpio, state: present }
+    - { name: curl, state: present }
+    - { name: docker, state: present }
+    - { name: git, state: present }
+    - { name: gnome-tweak-tool, state: present }
+    - { name: keepassx, state: present }
+    - { name: kernel-devel, state: present }
+    - { name: kernel-headers, state: present }
+    - { name: lsof, state: present }
+    - { name: nmap, state: present }
+    - { name: numix-gtk-theme, state: present }
+    - { name: numix-icon-theme, state: present }
+    - { name: numix-icon-theme-circle, state: present }
+    - { name: python2-flake8, state: present }
+    - { name: python2-tox, state: present }
+    - { name: python2-virtualenv, state: present }
+    - { name: sed, state: present }
+    - { name: sysstat, state: present }
+    - { name: tar, state: present }
+    - { name: unzip, state: present }
+    - { name: vim, state: present }
+    - { name: wget, state: present }
+    - { name: zip, state: present }
+    - { name: evolution, state: absent }
+    - { name: firefox, state: absent }
+    - { name: rhythmbox, state: absent }
+
+- name: Update all software
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Download GPG keys from RPM Fusion free
+  get_url:
+    url: http://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-{{ ansible_distribution_version }}
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-{{ ansible_distribution_version }}
+    mode: 0644
+
+- name: Download GPG keys from RPM Fusion nonfree
+  get_url:
+    url: http://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-{{ ansible_distribution_version }}
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-{{ ansible_distribution_version }}
+    mode: 0644
+
+- name: Enable RPM Fusion free
+  yum_repository:
+    name: rpmfusion-free
+    description: RPM Fusion for Fedora $releasever - Free
+    baseurl: http://download1.rpmfusion.org/free/fedora/releases/$releasever/Everything/$basearch/os/
+    metalink: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-$releasever&arch=$basearch
+    enabled: 1
+    metadata_expire: 14d
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+
+- name: Enable RPM Fusion free updates
+  yum_repository:
+    name: rpmfusion-free-updates
+    description: RPM Fusion for Fedora $releasever - Free - Updates
+    baseurl: http://download1.rpmfusion.org/free/fedora/updates/$releasever/$basearch/
+    metalink: https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-$releasever&arch=$basearch
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+
+- name: Enable RPM Fusion nonfree
+  yum_repository:
+    name: rpmfusion-nonfree
+    description: RPM Fusion for Fedora $releasever - Nonfree
+    baseurl: http://download1.rpmfusion.org/nonfree/fedora/releases/$releasever/Everything/$basearch/os/
+    metalink: https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-$releasever&arch=$basearch
+    enabled: 1
+    metadata_expire: 14d
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
+
+- name: Enable RPM Fusion nonfree updates
+  yum_repository:
+    name: rpmfusion-nonfree-updates
+    description: RPM Fusion for Fedora $releasever - Nonfree - Updates
+    baseurl: http://download1.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch/
+    metalink: https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
+
+- name: Install software from unofficial repos
+  dnf:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+  - { name: vlc, state: present }
+  - { name: VirtualBox, state: present }
+
+- name: Download Atom Editor from GitHub
+  get_url:
+    url: https://atom.io/download/rpm
+    dest: /tmp/atom.x86_64.rpm
+    force: no
+    mode: 0755
+
+- name: Install Atom Editor
+  dnf:
+    name: /tmp/atom.x86_64.rpm
+    state: present

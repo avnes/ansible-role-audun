@@ -1,0 +1,18 @@
+
+galaxy_info:
+  author: avnes
+  description: Will configure my personal laptop with Fedora customization
+  company:
+
+  license: license (MIT)
+
+  min_ansible_version: 2.1
+
+  platforms:
+  - name: Fedora
+    versions:
+    - 25
+
+  galaxy_tags: []
+
+dependencies: []
