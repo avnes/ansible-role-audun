@@ -18,6 +18,9 @@
 - name: Adding favorites to the launcher
   command: /usr/bin/gsettings set org.gnome.shell favorite-apps "['chromium-browser.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'PyCharm.desktop', 'keepassx2.desktop', 'org.gnome.gedit.desktop', 'atom.desktop']"
 
+- name: Turn off beep
+  command: /usr/bin/gsettings set org.gnome.desktop.wm.preferences audible-bell false
+
 - name: Remind about VirtualBox Extension Pack
   debug:
     msg: "Remember to download the VirtualBox Extension Pack from https://www.virtualbox.org/wiki/Downloads"
@@ -75,6 +78,7 @@
     -  { regexp: '^.*git-prompt.sh', line: 'source /usr/share/git-core/contrib/completion/git-prompt.sh' }
     -  { regexp: '^.*GIT_PS1_SHOWDIRTYSTATE', line: 'export GIT_PS1_SHOWDIRTYSTATE=true' }
     -  { regexp: '^.*GIT_PS1_SHOWUNTRACKEDFILES', line: 'export GIT_PS1_SHOWUNTRACKEDFILES=true' }
+    -  { regexp: '^.*EDITOR', line: 'export EDITOR=vim' }
     -  { regexp: '^.*activate', line: '#source ~/python2.7/bin/activate' }
 
 - name: Customize .bashrc with nasty PS1

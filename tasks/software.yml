@@ -112,6 +112,24 @@
     name: /tmp/atom.x86_64.rpm
     state: present
 
+- name: Download PyCharm
+  get_url:
+    url: "{{ pycharm_download_url }}"
+    dest: /tmp/pycharm-community.tar.gz
+    validate_certs: False
+    checksum: "{{ checksum_algorithm }}:{{ pycharm_checksum}}"
+
+- name: Make PyCharm install directory
+  file:
+    state: directory
+    path: "{{ pycharm_install_dir }}"
+
+- name: Unpack PyCharm into install directory
+  unarchive:
+    src: /tmp/pycharm-community.tar.gz
+    dest: "{{ pycharm_install_dir }}"
+    copy: no
+
 - name: Update pip
   pip:
     name: pip
