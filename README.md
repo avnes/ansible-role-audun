@@ -1,13 +1,14 @@
 # Role Name
 
-This role is used to setup my personal laptop
+This role is used to setup my personal laptop with Fedora customization
 
 ## Requirements
 
 ```
-sudo dnf install -y python2 python2-dnf libselinux-python ansible npm
-cd ~/.atom/packages/atom-beautify
-npm install tidy-markdown@2.0.4
+python2
+python2-dnf
+libselinux-python
+npm
 ```
 
 ## Role Variables
@@ -33,7 +34,9 @@ Including an example of how to use your role (for instance, with variables passe
 ```
 sudo dnf install -y python2 python2-dnf libselinux-python ansible npm
 ANSIBLE_CONFIG=./role.cfg; export ANSIBLE_CONFIG
-ansible-playbook -i tests/inventory --connection=local --ask-become-pass -vvvv tests/test.yml
+ansible-playbook -i tests/inventory --connection=local --ask-become-pass --ask-vault-pass -vvvv playbook.yml
+cd ~/.atom/packages/atom-beautify
+npm install tidy-markdown@2.0.4
 ```
 
 ## License

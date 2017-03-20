@@ -111,3 +111,13 @@
   dnf:
     name: /tmp/atom.x86_64.rpm
     state: present
+
+- name: Update pip
+  pip:
+    name: pip
+    state: latest
+
+- name: Update tox
+  pip:
+    name: tox
+    state: latest

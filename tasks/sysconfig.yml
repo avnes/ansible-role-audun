@@ -1,0 +1,19 @@
+---
+- name: Service sshd is enabled and started
+  service:
+    name: sshd
+    enabled: yes
+    state: started
+
+- name: Service firewalld is disabled and stopped
+  service:
+    name: firewalld
+    enabled: no
+    state: stopped
+
+- name: Increase inotify watchers
+  sysctl:
+    name: fs.inotify.max_user_watches
+    state: present
+    value: 52428
+    sysctl_set: yes

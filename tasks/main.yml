@@ -2,5 +2,8 @@
 - include: software.yml
   become: True
 
-- include: software.yml
+- include: sysconfig.yml
+  become: True
+
+- include: usrconfig.yml
   become: False

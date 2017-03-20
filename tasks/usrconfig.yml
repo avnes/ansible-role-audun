@@ -1,5 +1,4 @@
 ---
-
 - name: Setting the Numix GTK theme
   command: /usr/bin/gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
   changed_when: False
@@ -8,7 +7,100 @@
   command: /usr/bin/gsettings set org.gnome.desktop.interface icon-theme "Numix-Circle-Light"
   changed_when: False
 
+- name: Setting the screensaver timeout
+  command: /usr/bin/gsettings set org.gnome.desktop.session idle-delay 900
+  changed_when: False
+
+- name: Set desktop background picture
+  command: /usr/bin/gsettings set org.gnome.desktop.background picture-uri '"file://{{ files_base_dir }}/Data/Wallpapers/freedom_12-wallpaper-1366x768.jpg"'
+  changed_when: False
+
+- name: Adding favorites to the launcher
+  command: /usr/bin/gsettings set org.gnome.shell favorite-apps "['chromium-browser.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'PyCharm.desktop', 'keepassx2.desktop', 'org.gnome.gedit.desktop', 'atom.desktop']"
+
 - name: Remind about VirtualBox Extension Pack
   debug:
     msg: "Remember to download the VirtualBox Extension Pack from https://www.virtualbox.org/wiki/Downloads"
+  changed_when: False
+
+- name: Configure Git options
+  git_config: name={{ item.name }} scope={{ item.scope }} value={{ item.value }}
+  with_items:
+    - { name: 'user.name', scope: 'global', value: '{{ git_config_user_name }}' }
+    - { name: 'user.email', scope: 'global', value: '{{ git_config_user_email }}' }
+    - { name: 'alias.ci', scope: 'global', value: 'commit' }
+    - { name: 'alias.st', scope: 'global', value: 'status' }
+    - { name: 'alias.co', scope: 'global', value: 'checkout' }
+    - { name: 'alias.br', scope: 'global', value: 'branch' }
+    - { name: 'color.ui', scope: 'global', value: true }
+    - { name: 'format.pretty', scope: 'global', value: '%Cred%H%Creset - %C(bold yellow)%ad %d%Creset %s %C(bold green)(%cr)%Creset %C(bold blue)<%an>%Creset' }
+
+- name: Install Atom Editor plugins
+  command: apm install {{ item }}
+  with_items:
+    - busy-signal
+    - intentions
+    - linter-ui-default
+    - linter
+    - qolor
+    - language-ansible
+    - autocomplete-ansible
+    - git-plus
+    - git-time-machine
+    - atom-beautify
+    - advanced-open-file
+    - open-recent
+    - sublime-style-column-selection
+    - atom-jinja2
+    - zentabs
+    - minimap
+    - linter-markdown
+    - atom-sort-projects
+    - ascii-hex
+  changed_when: False
+
+- name: Checking if Python virtualenv is already configured
+  stat:
+    path: ~/python2.7
+  register: pydir
+  changed_when: false
+
+- name: Setting up Python virtualenv
+  command: virtualenv -p /usr/bin/python ~/python2.7
+  when: pydir.stat.isdir is not defined
+
+- name: Customize .bashrc
+  lineinfile: dest=~/.bashrc state=present regexp={{ item.regexp }} line={{ item.line }}
+  with_items:
+    -  { regexp: '^.*git-prompt.sh', line: 'source /usr/share/git-core/contrib/completion/git-prompt.sh' }
+    -  { regexp: '^.*GIT_PS1_SHOWDIRTYSTATE', line: 'export GIT_PS1_SHOWDIRTYSTATE=true' }
+    -  { regexp: '^.*GIT_PS1_SHOWUNTRACKEDFILES', line: 'export GIT_PS1_SHOWUNTRACKEDFILES=true' }
+    -  { regexp: '^.*activate', line: '#source ~/python2.7/bin/activate' }
+
+- name: Create VIM config
+  file:
+    path: ~/.vimrc
+    state: touch
+    mode: 0700
+
+- name: Customize .vimrc
+  lineinfile:
+    dest: ~/.vimrc
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    -  { regexp: '^set mouse', line: 'set mouse-=a' }
+
+- name: Set file permissions on SSH keys
+  file:
+    path: "{{ item.path }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { path: '~/.ssh/id_rsa.pub', mode: '0600'}
+    - { path: '~/.ssh/id_rsa', mode: '0600'}
+  changed_when: False
+
+- name: Downgrade tidy-markdown due to bug
+  shell: cd ~/.atom/packages/atom-beautify && npm install tidy-markdown@2.0.4
   changed_when: False
