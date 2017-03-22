@@ -1,0 +1,6 @@
+---
+- name: Restart Docker Daemon
+  become: True
+  service:
+    name: docker
+    state: restarted

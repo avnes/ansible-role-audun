@@ -17,3 +17,27 @@
     state: present
     value: 52428
     sysctl_set: yes
+
+- name: Add docker group
+  group:
+    name: docker
+    state: present
+
+- name: Add me to the docker group
+  user:
+    name: audun
+    groups: docker
+    append: yes
+    state: present
+
+- name: Create directory for Docker
+  file:
+    path: /docker/data
+    state: directory
+
+- name: Setup Docker to use new directory
+  lineinfile:
+    dest: /etc/sysconfig/docker
+    regexp: "^OPTIONS="
+    line: "OPTIONS='--selinux-enabled -g /docker/data -p /var/run/docker.pid --log-driver=journald'"
+  notify: Restart Docker Daemon
