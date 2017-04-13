@@ -60,6 +60,7 @@
     - linter-markdown
     - atom-sort-projects
     - ascii-hex
+    - sort-lines
   changed_when: False
 
 - name: Checking if Python virtualenv is already configured
