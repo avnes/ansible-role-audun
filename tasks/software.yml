@@ -98,7 +98,6 @@
     state: "{{ item.state }}"
   with_items:
   - { name: vlc, state: present }
-  - { name: VirtualBox, state: present }
 
 - name: Download Atom Editor from GitHub
   get_url:

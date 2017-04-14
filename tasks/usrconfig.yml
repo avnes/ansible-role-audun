@@ -21,11 +21,6 @@
 - name: Turn off beep
   command: /usr/bin/gsettings set org.gnome.desktop.wm.preferences audible-bell false
 
-- name: Remind about VirtualBox Extension Pack
-  debug:
-    msg: "Remember to download the VirtualBox Extension Pack from https://www.virtualbox.org/wiki/Downloads"
-  changed_when: False
-
 - name: Configure Git options
   git_config: name={{ item.name }} scope={{ item.scope }} value={{ item.value }}
   with_items:
