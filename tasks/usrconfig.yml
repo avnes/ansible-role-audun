@@ -103,7 +103,3 @@
     - { path: '~/.ssh/id_rsa.pub', mode: '0600'}
     - { path: '~/.ssh/id_rsa', mode: '0600'}
   changed_when: False
-
-- name: Downgrade tidy-markdown due to bug
-  shell: cd ~/.atom/packages/atom-beautify && npm install tidy-markdown@2.0.4
-  changed_when: False
