@@ -19,14 +19,17 @@
     - { name: numix-gtk-theme, state: present }
     - { name: numix-icon-theme, state: present }
     - { name: numix-icon-theme-circle, state: present }
+    - { name: powerline, state: present }
     - { name: python2-flake8, state: present }
     - { name: python2-tox, state: present }
     - { name: python2-virtualenv, state: present }
+    - { name: python3-pip, state: present }
     - { name: sed, state: present }
     - { name: sysstat, state: present }
     - { name: tar, state: present }
     - { name: unzip, state: present }
     - { name: vim, state: present }
+    - { name: vim-plugin-powerline, state: present }
     - { name: wget, state: present }
     - { name: zip, state: present }
     - { name: evolution, state: absent }
@@ -134,7 +137,19 @@
     name: pip
     state: latest
 
-- name: Update tox
+- name: Install from pypi for Python2 (default)
   pip:
-    name: tox
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - tox
+    - powerline_gitstatus
+
+- name: Install from pypi for Python3
+  pip:
+    executable: '/usr/bin/python3 -m pip'
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - tox
+    - powerline_gitstatus

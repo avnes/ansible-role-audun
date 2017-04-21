@@ -77,8 +77,20 @@
     -  { regexp: '^.*EDITOR', line: 'export EDITOR=vim' }
     -  { regexp: '^.*activate', line: '#source ~/python2.7/bin/activate' }
 
-- name: Customize .bashrc with nasty PS1
-  lineinfile: dest=~/.bashrc state=present regexp='^.*PS1=' line="export PS1='\[\033[00;36m\]\u@\h\[\033[00m\]:\[\033[01;34m\] \w\[\033[00m\]$(__git_ps1 \" (%s)\")\$ '"
+- name: Add powerline config to bash
+  blockinfile:
+    path: ~/.bashrc
+    state: present
+    block: |
+      if [ -f `which powerline-daemon` ]; then
+        powerline-daemon -q
+        POWERLINE_BASH_CONTINUATION=1
+        POWERLINE_BASH_SELECT=1
+        . /usr/share/powerline/bash/powerline.sh
+      fi
+
+#- name: Customize .bashrc with nasty PS1
+#  lineinfile: dest=~/.bashrc state=present regexp='^.*PS1=' line="export PS1='\[\033[00;36m\]\u@\h\[\033[00m\]:\[\033[01;34m\] \w\[\033[00m\]$(__git_ps1 \" (%s)\")\$ '"
 
 - name: Create VIM config
   file:
@@ -86,14 +98,17 @@
     state: touch
     mode: 0700
 
-- name: Customize .vimrc
-  lineinfile:
-    dest: ~/.vimrc
+- name: Add powerline config to vim
+  blockinfile:
+    path: ~/.vimrc
     state: present
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    -  { regexp: '^set mouse', line: 'set mouse-=a' }
+    block: |
+      python3 from powerline.vim import setup as powerline_setup
+      python3 powerline_setup()
+      python3 del powerline_setup
+      set laststatus=2
+      set t_Co=256
+      set mouse-=a
 
 - name: Set file permissions on SSH keys
   file:

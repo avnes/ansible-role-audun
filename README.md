@@ -33,8 +33,6 @@ None
 sudo dnf install -y python2 python2-dnf libselinux-python ansible npm
 ANSIBLE_CONFIG=./role.cfg; export ANSIBLE_CONFIG
 ansible-playbook -i tests/inventory --connection=local --ask-become-pass --ask-vault-pass -vvvv tests/test.yml
-cd ~/.atom/packages/atom-beautify
-npm install tidy-markdown@2.0.4
 ```
 
 ## License
