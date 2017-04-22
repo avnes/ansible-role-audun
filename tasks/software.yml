@@ -24,6 +24,7 @@
     - { name: python2-tox, state: present }
     - { name: python2-virtualenv, state: present }
     - { name: python3-pip, state: present }
+    - { name: screenfetch, state: present }
     - { name: sed, state: present }
     - { name: sysstat, state: present }
     - { name: tar, state: present }
