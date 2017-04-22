@@ -3,3 +3,7 @@ pycharm_download_url: https://download.jetbrains.com/python/pycharm-community-20
 pycharm_install_dir: /opt/pycharm
 pycharm_checksum: 1300e15b760a05d0b41f7d85674c01368e37ac2b6215889badf8ab0adcf4a34b
 checksum_algorithm: sha256
+use_pycharm: True
+
+use_rpmfusion_free: True
+use_rpmfusion_nonfree: False

@@ -47,12 +47,14 @@
     url: http://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-{{ ansible_distribution_version }}
     dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-{{ ansible_distribution_version }}
     mode: 0644
+  when: "{{ use_rpmfusion_free }}"
 
 - name: Download GPG keys from RPM Fusion nonfree
   get_url:
     url: http://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-{{ ansible_distribution_version }}
     dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-{{ ansible_distribution_version }}
     mode: 0644
+  when: "{{ use_rpmfusion_nonfree }}"
 
 - name: Enable RPM Fusion free
   yum_repository:
@@ -64,6 +66,7 @@
     metadata_expire: 14d
     gpgcheck: 1
     gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+  when: "{{ use_rpmfusion_free }}"
 
 - name: Enable RPM Fusion free updates
   yum_repository:
@@ -74,6 +77,7 @@
     enabled: 1
     gpgcheck: 1
     gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-$releasever
+  when: "{{ use_rpmfusion_free }}"
 
 - name: Enable RPM Fusion nonfree
   yum_repository:
@@ -85,6 +89,7 @@
     metadata_expire: 14d
     gpgcheck: 1
     gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
+  when: "{{ use_rpmfusion_nonfree }}"
 
 - name: Enable RPM Fusion nonfree updates
   yum_repository:
@@ -95,13 +100,15 @@
     enabled: 1
     gpgcheck: 1
     gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
+  when: "{{ use_rpmfusion_nonfree }}"
 
-- name: Install software from unofficial repos
+- name: Install software from RPM Fusion free
   dnf:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   with_items:
   - { name: vlc, state: present }
+  when: "{{ use_rpmfusion_free }}"
 
 - name: Download Atom Editor from GitHub
   get_url:
@@ -121,17 +128,20 @@
     dest: /tmp/pycharm-community.tar.gz
     validate_certs: False
     checksum: "{{ checksum_algorithm }}:{{ pycharm_checksum}}"
+  when: "{{ use_pycharm }}"
 
 - name: Make PyCharm install directory
   file:
     state: directory
     path: "{{ pycharm_install_dir }}"
+  when: "{{ use_pycharm }}"
 
 - name: Unpack PyCharm into install directory
   unarchive:
     src: /tmp/pycharm-community.tar.gz
     dest: "{{ pycharm_install_dir }}"
     copy: no
+  when: "{{ use_pycharm }}"
 
 - name: Update pip
   pip:
