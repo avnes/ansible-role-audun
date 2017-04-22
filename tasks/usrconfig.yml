@@ -16,7 +16,7 @@
   changed_when: False
 
 - name: Adding favorites to the launcher
-  command: /usr/bin/gsettings set org.gnome.shell favorite-apps "['chromium-browser.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'PyCharm.desktop', 'keepassx2.desktop', 'org.gnome.gedit.desktop', 'atom.desktop']"
+  command: /usr/bin/gsettings set org.gnome.shell favorite-apps "['chromium-browser.desktop', 'com.gexperts.Tilix.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'PyCharm.desktop', 'keepassx2.desktop', 'org.gnome.gedit.desktop', 'atom.desktop']"
 
 - name: Turn off beep
   command: /usr/bin/gsettings set org.gnome.desktop.wm.preferences audible-bell false
@@ -79,26 +79,31 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    -  { regexp: '^.*git-prompt.sh', line: 'source /usr/share/git-core/contrib/completion/git-prompt.sh' }
-    -  { regexp: '^.*GIT_PS1_SHOWDIRTYSTATE', line: 'export GIT_PS1_SHOWDIRTYSTATE=true' }
-    -  { regexp: '^.*GIT_PS1_SHOWUNTRACKEDFILES', line: 'export GIT_PS1_SHOWUNTRACKEDFILES=true' }
+    #-  { regexp: '^.*git-prompt.sh', line: 'source /usr/share/git-core/contrib/completion/git-prompt.sh' }
+    #-  { regexp: '^.*GIT_PS1_SHOWDIRTYSTATE', line: 'export GIT_PS1_SHOWDIRTYSTATE=true' }
+    #-  { regexp: '^.*GIT_PS1_SHOWUNTRACKEDFILES', line: 'export GIT_PS1_SHOWUNTRACKEDFILES=true' }
     -  { regexp: '^.*EDITOR', line: 'export EDITOR=vim' }
     -  { regexp: '^.*activate', line: '#source ~/python2.7/bin/activate' }
 
-#- name: Customize .bashrc with nasty PS1
-#  lineinfile: dest=~/.bashrc state=present regexp='^.*PS1=' line="export PS1='\[\033[00;36m\]\u@\h\[\033[00m\]:\[\033[01;34m\] \w\[\033[00m\]$(__git_ps1 \" (%s)\")\$ '"
+- name: Create ~/bin directory
+  file:
+    path: ~/bin
+    state: directory
 
 - name: Create powerline config directory
+  when: not use_powerline_shell
   file:
     path: ~/.config/powerline
     state: directory
 
 - name: Customize powerline
+  when: not "{{ use_powerline_shell }}"
   copy:
     src: config.json
     dest: ~/.config/powerline/config.json
 
 - name: Add powerline config to bash
+  when: not "{{ use_powerline_shell }}"
   blockinfile:
     dest: ~/.bashrc
     create: yes
@@ -109,6 +114,21 @@
         POWERLINE_BASH_CONTINUATION=1
         POWERLINE_BASH_SELECT=1
         . /usr/share/powerline/bash/powerline.sh
+      fi
+
+- name: Add powerline-shell config to bash
+  when: "{{ use_powerline_shell }}"
+  blockinfile:
+    dest: ~/.bashrc
+    create: yes
+    state: present
+    block: |
+      function _update_ps1() {
+      PS1="$(~/bin/powerline-shell.py $? 2> /dev/null)"
+      }
+
+      if [ "$TERM" != "linux" ]; then
+          PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
       fi
 
 - name: Add powerline config to vim

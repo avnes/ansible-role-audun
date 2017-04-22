@@ -7,3 +7,5 @@ use_pycharm: True
 
 use_rpmfusion_free: True
 use_rpmfusion_nonfree: False
+use_powerline_shell: True
+use_copr: True

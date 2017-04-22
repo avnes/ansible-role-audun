@@ -59,3 +59,7 @@ MIT
 ## Author Information
 
 <https://github.com/avnes>
+
+## Credits
+
+<https://github.com/banga/powerline-shell>

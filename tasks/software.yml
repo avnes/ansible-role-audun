@@ -102,13 +102,28 @@
     gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-$releasever
   when: "{{ use_rpmfusion_nonfree }}"
 
-- name: Install software from RPM Fusion free
+- name: Add repo for tilix on Fedora 25
+  shell: dnf -y copr enable heikoada/terminix
+  when:
+    - "{{ use_copr }}"
+    - ansible_distribution == 'Fedora'
+    - ansible_distribution_version == '25'
+
+- name: Install software from rpmfusion free
   dnf:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   with_items:
   - { name: vlc, state: present }
   when: "{{ use_rpmfusion_free }}"
+
+- name: Install software from COPR
+  dnf:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+  - { name: tilix, state: present }
+  when: "{{ use_copr }}"
 
 - name: Download Atom Editor from GitHub
   get_url:
