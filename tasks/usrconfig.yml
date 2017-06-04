@@ -82,8 +82,10 @@
     #-  { regexp: '^.*git-prompt.sh', line: 'source /usr/share/git-core/contrib/completion/git-prompt.sh' }
     #-  { regexp: '^.*GIT_PS1_SHOWDIRTYSTATE', line: 'export GIT_PS1_SHOWDIRTYSTATE=true' }
     #-  { regexp: '^.*GIT_PS1_SHOWUNTRACKEDFILES', line: 'export GIT_PS1_SHOWUNTRACKEDFILES=true' }
-    -  { regexp: '^.*EDITOR', line: 'export EDITOR=vim' }
-    -  { regexp: '^.*activate', line: '#source ~/python2.7/bin/activate' }
+    - { regexp: '^.*EDITOR', line: 'export EDITOR=vim' }
+    - { regexp: '^.*activate', line: '#source ~/python2.7/bin/activate' }
+    - { regexp: '^.*virtualenvwrapper.*', line: 'source /usr/bin/virtualenvwrapper.sh'}
+    - { regexp: '^.*VIRTUALENVWRAPPER_PYTHON', line: 'export VIRTUALENVWRAPPER_PYTHON=/home/audun/python2.7/bin/python'}
 
 - name: Create ~/bin directory
   file:
