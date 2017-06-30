@@ -172,6 +172,7 @@
   with_items:
     - tox
     - powerline_gitstatus
+    - virtualenvwrapper
 
 - name: Install from pypi for Python3
   pip:
@@ -181,3 +182,4 @@
   with_items:
     - tox
     - powerline_gitstatus
+    - virtualenvwrapper

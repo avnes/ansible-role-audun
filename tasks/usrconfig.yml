@@ -84,6 +84,7 @@
     #-  { regexp: '^.*GIT_PS1_SHOWUNTRACKEDFILES', line: 'export GIT_PS1_SHOWUNTRACKEDFILES=true' }
     - { regexp: '^.*EDITOR', line: 'export EDITOR=vim' }
     - { regexp: '^.*VIRTUALENVWRAPPER_PYTHON', line: 'export VIRTUALENVWRAPPER_PYTHON=~/python2.7/bin/python'}
+    - { regexp: '^.VIRTUALENVWRAPPER_VIRTUALENV', line: 'export VIRTUALENVWRAPPER_PYTHON=~/python2.7/bin/virtualenv'}
     - { regexp: '^.*virtualenvwrapper.*', line: 'source /usr/bin/virtualenvwrapper.sh'}
 
 - name: Create ~/bin directory
@@ -121,6 +122,7 @@
   copy:
     src: powerline-shell.py
     dest: ~/bin/powerline-shell.py
+    mode: 0700
 
 - name: Add powerline-shell config to bash
   when: "{{ use_powerline_shell }}"
