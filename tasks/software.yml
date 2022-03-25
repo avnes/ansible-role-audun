@@ -19,7 +19,6 @@
     - { name: numix-gtk-theme, state: present }
     - { name: numix-icon-theme, state: present }
     - { name: numix-icon-theme-circle, state: present }
-    - { name: powerline, state: present }
     - { name: python2-flake8, state: present }
     - { name: python2-tox, state: present }
     - { name: python2-virtualenv, state: present }
@@ -30,7 +29,6 @@
     - { name: tar, state: present }
     - { name: unzip, state: present }
     - { name: vim, state: present }
-    - { name: vim-plugin-powerline, state: present }
     - { name: wget, state: present }
     - { name: zip, state: present }
     - { name: evolution, state: absent }
@@ -171,7 +169,6 @@
     state: latest
   with_items:
     - tox
-    - powerline_gitstatus
     - virtualenvwrapper
 
 - name: Install from pypi for Python3
@@ -181,5 +178,4 @@
     state: latest
   with_items:
     - tox
-    - powerline_gitstatus
     - virtualenvwrapper
